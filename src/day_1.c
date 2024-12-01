@@ -41,4 +41,6 @@ void day1(void)
 
     printf("%d\n", p1);
     printf("%d\n", p2);
+    array_free(left, NULL);
+    array_free(right, NULL);
 }
