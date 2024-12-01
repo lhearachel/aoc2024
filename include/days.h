@@ -1,8 +1,8 @@
 #ifndef AOC_2024_DAYS_H
 #define AOC_2024_DAYS_H
 
-typedef int (*day_func)(int part);
+typedef void (*day_func)(void);
 
-int day1(int part);
+void day1(void);
 
 #endif // AOC_2024_DAYS_H

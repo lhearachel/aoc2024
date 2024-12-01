@@ -2,80 +2,43 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "array.h"
 #include "days.h"
-#include "io.h"
 
-// #define TEST
-
-#ifdef TEST
-#define INFILE "data/day1_test.in"
-#define LSIZE  6
-#define NSIZE  1
-#else
-#define INFILE "data/day1.in"
-#define LSIZE  1000
-#define NSIZE  5
-#endif
-
-static int part1(void);
-static int part2(void);
-
-int day1(int part)
-{
-    return part == 1 ? part1() : part2();
-}
-
-struct lists {
-    int *left;
-    int *right;
-};
-
-static void load_line(const char *line, const int i, void *cb_data)
-{
-    struct lists *lists = cb_data;
-    char num[NSIZE + 1] = { 0 };
-
-    strncpy(num, line, NSIZE);
-    lists->left[i] = atoi(num);
-    strncpy(num, line + NSIZE + 3, NSIZE);
-    lists->right[i] = atoi(num);
-}
-
-static int compare(const void *a, const void *b)
+static int c(const void *a, const void *b)
 {
     return (*(int *)a - *(int *)b);
 }
 
-static int part1(void)
+void day1(void)
 {
-    int left[LSIZE], right[LSIZE];
-    struct lists lists = { left, right };
-    load_data(INFILE, &lists, load_line);
-    qsort(left, LSIZE, sizeof(int), compare);
-    qsort(right, LSIZE, sizeof(int), compare);
+    struct array *left = array_new(1000, true);
+    struct array *right = array_new(1000, true);
 
-    int sum = 0;
-    for (int i = 0; i < LSIZE; i++) {
-        sum = sum + abs(left[i] - right[i]);
+    int l_i, r_i;
+    while (scanf("%d   %d", &l_i, &r_i) != EOF) {
+        array_append_i(left, l_i);
+        array_append_i(right, r_i);
     }
 
-    return sum;
-}
+    qsort(left->data.ints, left->used, sizeof(int), c);
+    qsort(right->data.ints, left->used, sizeof(int), c);
 
-static int part2(void)
-{
-    int left[LSIZE], right[LSIZE];
-    struct lists lists = { left, right };
-    load_data(INFILE, &lists, load_line);
-
-    int sum = 0;
-    for (int i = 0; i < LSIZE; i++) {
-        int count_of = 0;
-        for (int j = 0; j < LSIZE; j++) {
-            if (right[j] == left[i]) count_of++;
+    int p1 = 0, p2 = 0, count_of = 0, prev_l = -1;
+    size_t j = 0;
+    for (size_t i = 0; i < left->used; i++) {
+        if (prev_l != left->data.ints[i]) count_of = 0;
+        while (right->data.ints[j] < left->data.ints[i]) j++;
+        while (right->data.ints[j] == left->data.ints[i]) {
+            count_of++;
+            j++;
         }
-        sum = sum + (left[i] * count_of);
+        prev_l = left->data.ints[i];
+
+        p1 += abs(left->data.ints[i] - right->data.ints[i]);
+        p2 += left->data.ints[i] * count_of;
     }
 
-    return sum;
+    printf("%d\n", p1);
+    printf("%d\n", p2);
 }

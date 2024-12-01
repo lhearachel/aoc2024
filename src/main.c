@@ -10,14 +10,11 @@ static const day_func day_funcs[] = {
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3) {
-        fprintf(stderr, "missing args; usage: aoc2024 <day> <part>\n");
+    if (argc != 2) {
+        fprintf(stderr, "missing args; usage: aoc2024 <day>\n");
         exit(EXIT_FAILURE);
     }
 
-    int day = atoi(argv[1]);
-    int part = atoi(argv[2]);
-    printf("%d\n", day_funcs[day](part));
-
+    day_funcs[atoi(argv[1])]();
     exit(EXIT_SUCCESS);
 }
