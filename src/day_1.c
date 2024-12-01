@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "array.h"
 #include "days.h"
@@ -39,8 +38,11 @@ void day1(void)
         p2 += left->data.ints[i] * count_of;
     }
 
-    printf("%d\n", p1);
-    printf("%d\n", p2);
     array_free(left, NULL);
     array_free(right, NULL);
+    free(left);
+    free(right);
+
+    printf("%d\n", p1);
+    printf("%d\n", p2);
 }
