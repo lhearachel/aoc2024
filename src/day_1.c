@@ -1,8 +1,9 @@
-#include "days.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "days.h"
+#include "io.h"
 
 // #define TEST
 
@@ -24,29 +25,20 @@ int day1(int part)
     return part == 1 ? part1() : part2();
 }
 
-static void read(int left[], int right[])
+struct lists {
+    int *left;
+    int *right;
+};
+
+static void load_line(const char *line, const int i, void *cb_data)
 {
-    FILE *fin = fopen(INFILE, "r");
-    if (fin == NULL) {
-        fprintf(stderr, "Cannot open input file\n");
-        exit(EXIT_FAILURE);
-    }
-
-    char line[32];
+    struct lists *lists = cb_data;
     char num[NSIZE + 1] = { 0 };
-    for (int i = 0; i < LSIZE; i++) {
-        if (fgets(line, sizeof(line), fin) == NULL) {
-            fprintf(stderr, "Unexpected EOF on line %d\n", i);
-            exit(EXIT_FAILURE);
-        }
 
-        strncpy(num, line, NSIZE);
-        left[i] = atoi(num);
-        strncpy(num, line + NSIZE + 3, NSIZE);
-        right[i] = atoi(num);
-    }
-
-    fclose(fin);
+    strncpy(num, line, NSIZE);
+    lists->left[i] = atoi(num);
+    strncpy(num, line + NSIZE + 3, NSIZE);
+    lists->right[i] = atoi(num);
 }
 
 static int compare(const void *a, const void *b)
@@ -57,7 +49,8 @@ static int compare(const void *a, const void *b)
 static int part1(void)
 {
     int left[LSIZE], right[LSIZE];
-    read(left, right);
+    struct lists lists = { left, right };
+    load_data(INFILE, &lists, load_line);
     qsort(left, LSIZE, sizeof(int), compare);
     qsort(right, LSIZE, sizeof(int), compare);
 
@@ -72,7 +65,8 @@ static int part1(void)
 static int part2(void)
 {
     int left[LSIZE], right[LSIZE];
-    read(left, right);
+    struct lists lists = { left, right };
+    load_data(INFILE, &lists, load_line);
 
     int sum = 0;
     for (int i = 0; i < LSIZE; i++) {
