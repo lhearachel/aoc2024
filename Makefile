@@ -1,4 +1,4 @@
-CFLAGS = -MMD -Wall -Wextra -Wpedantic -std=c99 -Iinclude
+CFLAGS = -MMD -Werror -Wall -Wextra -Wpedantic -std=c99 -Iinclude
 
 SRC = $(wildcard src/*.c)
 OBJ = $(SRC:%.c=%.o)
