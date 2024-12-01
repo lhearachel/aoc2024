@@ -1,0 +1,6 @@
+*.d
+*.o
+*.in
+aoc2024
+compile_commands.json
+.cache/
