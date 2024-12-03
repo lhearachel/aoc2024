@@ -31,6 +31,33 @@ void array_free(struct array *arr, free_cb cb)
     arr->size = 0;
 }
 
+void array_clear(struct array *arr, free_cb cb)
+{
+    if (!arr->is_int) {
+        for (size_t i = 0; i < arr->used; i++) {
+            cb(arr->data.ptrs[i]);
+            arr->data.ptrs[i] = NULL;
+        }
+    } else {
+        for (size_t i = 0; i < arr->used; i++) {
+            arr->data.ints[i] = 0;
+        }
+    }
+
+    arr->used = 0;
+}
+
+int array_remove_i(struct array *arr, size_t i)
+{
+    int removed = arr->data.ints[i];
+    do {
+        arr->data.ints[i] = arr->data.ints[i + 1];
+    } while (++i < arr->used - 1);
+
+    arr->used--;
+    return removed;
+}
+
 void array_append_i(struct array *arr, int i)
 {
     if (arr->used == arr->size) {

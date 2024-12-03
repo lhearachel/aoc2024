@@ -19,6 +19,9 @@ struct array {
 
 struct array* array_new(size_t initial, bool is_int);
 void array_free(struct array *arr, free_cb cb);
+void array_clear(struct array *arr, free_cb cb);
+
+int array_remove_i(struct array *arr, size_t i);
 
 void array_append_i(struct array *arr, int i);
 void array_append_d(struct array *arr, void *d);
