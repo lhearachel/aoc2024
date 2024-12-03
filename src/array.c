@@ -50,9 +50,11 @@ void array_clear(struct array *arr, free_cb cb)
 int array_remove_i(struct array *arr, size_t i)
 {
     int removed = arr->data.ints[i];
-    do {
+
+    while (i < arr->used - 1) {
         arr->data.ints[i] = arr->data.ints[i + 1];
-    } while (++i < arr->used - 1);
+        i++;
+    }
 
     arr->used--;
     return removed;
