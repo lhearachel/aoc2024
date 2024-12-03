@@ -7,6 +7,7 @@ static const day_func day_funcs[] = {
     [0] = NULL,
     [1] = day1,
     [2] = day2,
+    [3] = day3,
 };
 
 int main(int argc, char *argv[])
